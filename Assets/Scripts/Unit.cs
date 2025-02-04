@@ -2,12 +2,23 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    private Vector3 targetPosition;
     [SerializeField] private Animator unitAnimator;
+    private LevelGrid levelGrid;
+
+    private Vector3 targetPosition;
+    private GridPosition gridPosition;
 
     private void Awake()
     {
         targetPosition = transform.position;
+    }
+
+    private void Start()
+    {
+        levelGrid = LevelGrid.Instance;
+        gridPosition = levelGrid.GetGridPosition(transform.position);
+
+        levelGrid.AddUnitAtGridPosition(gridPosition, this);
     }
 
     private void Update()
@@ -30,9 +41,20 @@ public class Unit : MonoBehaviour
             unitAnimator.SetBool("IsWalking", false);
         }
 
+        GridPosition newgridPosition = levelGrid.GetGridPosition(transform.position);
+
+        if(newgridPosition != gridPosition)
+        {
+            levelGrid.UnitMovedGridPosition(this, gridPosition, newgridPosition);
+            gridPosition = newgridPosition;
+        }
+
     }
     public void Move(Vector3 targetPosition)
     {
+        GridPosition gridPosition = levelGrid.GetGridSystem().GetGridPosition(targetPosition);
+        GridObject gridObject = levelGrid.GetGridSystem().GetGridObject(gridPosition);
+
         this.targetPosition = targetPosition;
     }
 }
