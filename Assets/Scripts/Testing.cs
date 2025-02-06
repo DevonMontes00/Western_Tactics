@@ -10,16 +10,6 @@ public class Testing : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Unit unit = UnitActionSystem.Instance.GetSelectedUnit();
-            List<GridPosition> validGridPositions = unit.GetMoveAction().GetValidActionGridPositionList();
-            GridSystemVisual.Instance.ShowGridPositionList(validGridPositions);
-        }
-
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            GridSystemVisual.Instance.HideAllGridPosition();
-        }
+        
     }
 }
