@@ -69,4 +69,9 @@ public class GridObject
     {
         return gridPosition;
     }
+
+    public bool HasAnyUnit()
+    {
+        return unitList.Count > 0;
+    }
 }

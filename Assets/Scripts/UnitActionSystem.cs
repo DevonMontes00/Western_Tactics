@@ -37,7 +37,12 @@ public class UnitActionSystem : MonoBehaviour
 
             else if (Physics.Raycast(ray, out raycastHit, float.MaxValue, mousePlaneLayerMask))
             {
-                selectedUnit.Move(raycastHit.point);
+                GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
+
+                if (selectedUnit.GetMoveAction().IsValidActionGridPosition(mouseGridPosition))
+                {
+                    selectedUnit.GetMoveAction().Move(mouseGridPosition);
+                }
             }
             
         }
