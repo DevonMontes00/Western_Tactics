@@ -1,15 +1,22 @@
 using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
+using NUnit.Framework;
 
 public class UnitActionSystem : MonoBehaviour
 {
     public static UnitActionSystem Instance { get; private set; }
 
     public event EventHandler OnSelectedUnitChanged;
+    public event EventHandler OnSelectedActionChanged;
+    public event EventHandler<bool> OnBusyChanged;
 
     [SerializeField] private Unit selectedUnit;
-    [SerializeField] private LayerMask units;
+    [SerializeField] private LayerMask unitLayerMask;
     [SerializeField] private LayerMask mousePlaneLayerMask;
+
+    private BaseAction selectedAction;
+    private bool isBusy = false;
 
     private void Awake()
     {
@@ -23,49 +30,104 @@ public class UnitActionSystem : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        SetSelectedUnit(selectedUnit);
+    }
+
     private void Update()
     {
-
-        if (Input.GetMouseButtonDown(0))
+        if (isBusy)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, units))
-            {
-                HandleUnitSelection(raycastHit);
-            }
-
-            else if (Physics.Raycast(ray, out raycastHit, float.MaxValue, mousePlaneLayerMask))
-            {
-                GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
-
-                if (selectedUnit.GetMoveAction().IsValidActionGridPosition(mouseGridPosition))
-                {
-                    selectedUnit.GetMoveAction().Move(mouseGridPosition);
-                }
-            }
+            return;
+        }
+        
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
         }
 
-        if(Input.GetMouseButtonDown(1))
+        if(TryHandleUnitSelection())
         {
-            selectedUnit.GetSpinAction().Spin();
+            return;
+        }
+
+        HandleSelectedAction();
+
+    }
+
+    private void HandleSelectedAction()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());
+
+            if (selectedAction.IsValidActionGridPosition(mouseGridPosition))
+            {
+                SetBusy();
+                selectedAction.TakeAction(mouseGridPosition, ClearBusy);
+            }
         }
     }
 
-    private void HandleUnitSelection(RaycastHit raycastHit)
+    private void SetBusy()
     {
-        SetSelectedUnit(raycastHit.collider.gameObject.GetComponent<Unit>());
+        isBusy = true;
+        OnBusyChanged?.Invoke(this, isBusy);
+    }
+
+    private void ClearBusy()
+    {
+        isBusy = false;
+        OnBusyChanged?.Invoke(this, isBusy);
+    }
+
+    private bool TryHandleUnitSelection()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, unitLayerMask))
+            {
+                if (raycastHit.transform.TryGetComponent<Unit>(out Unit unit))
+                {
+                    if (unit == selectedUnit)
+                    {
+                        //Unit is already selected
+                        return false;
+                    }
+                    SetSelectedUnit(unit);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void SetSelectedUnit(Unit unit)
     {
         selectedUnit = unit;
+
+        SetSelectedAction(unit.GetMoveAction());
+
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
             
+    }
+
+    public void SetSelectedAction(BaseAction baseAction)
+    {
+        selectedAction = baseAction;
+
+        OnSelectedActionChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public Unit GetSelectedUnit()
     {
         return selectedUnit;
+    }
+
+    public BaseAction GetSelectedAction()
+    {
+        return selectedAction;
     }
 }

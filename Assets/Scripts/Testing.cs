@@ -5,7 +5,7 @@ public class Testing : MonoBehaviour
 {
     private void Start()
     {
-        GridSystemVisual.Instance.HideAllGridPosition();
+        //GridSystemVisual.Instance.HideAllGridPosition();
     }
 
     private void Update()
