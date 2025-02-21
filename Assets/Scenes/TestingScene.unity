@@ -1135,6 +1135,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8096737660647998167, guid: 48e928f1fe1adae4e8623d0b4a0aa230, type: 3}
+      propertyPath: health
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8325384633810102145, guid: 48e928f1fe1adae4e8623d0b4a0aa230, type: 3}
       propertyPath: unitAnimator
       value: 
@@ -1323,6 +1327,10 @@ PrefabInstance:
     - target: {fileID: 4955300230140896835, guid: 3dc5c78479c52444ab8cebd2061f1ec4, type: 3}
       propertyPath: m_Name
       value: Unit Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6024868290986501210, guid: 3dc5c78479c52444ab8cebd2061f1ec4, type: 3}
+      propertyPath: health
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2922,6 +2930,10 @@ PrefabInstance:
     - target: {fileID: 7423346729296445646, guid: 48e928f1fe1adae4e8623d0b4a0aa230, type: 3}
       propertyPath: m_Name
       value: Unit
+      objectReference: {fileID: 0}
+    - target: {fileID: 8096737660647998167, guid: 48e928f1fe1adae4e8623d0b4a0aa230, type: 3}
+      propertyPath: health
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8325384633810102145, guid: 48e928f1fe1adae4e8623d0b4a0aa230, type: 3}
       propertyPath: unitAnimator
