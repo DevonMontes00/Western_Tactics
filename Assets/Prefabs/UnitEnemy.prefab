@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7d22fc6b9a431b043a917fb89a80bcfc, type: 2}
+    - target: {fileID: 2226697321485558690, guid: 48e928f1fe1adae4e8623d0b4a0aa230, type: 3}
+      propertyPath: ragdollPrefab
+      value: 
+      objectReference: {fileID: 2500514854179442599, guid: a0073eba01fe4b241b9595bcb78b1eb2, type: 3}
     - target: {fileID: 4343438556725344597, guid: 48e928f1fe1adae4e8623d0b4a0aa230, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -58,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7423346729296445646, guid: 48e928f1fe1adae4e8623d0b4a0aa230, type: 3}
       propertyPath: m_Name
-      value: Unit Enemy
+      value: UnitEnemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
