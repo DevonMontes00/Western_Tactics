@@ -3,19 +3,19 @@ using UnityEngine;
 
 public class GridDebugObject : MonoBehaviour
 {
-    private GridObject gridObject;
+    private object gridObject;
     private TextMeshPro textMeshPro;
 
     private void Awake()
     {
         textMeshPro = this.GetComponentInChildren<TextMeshPro>();
     }
-    public void SetGridObject(GridObject gridObject)
+    public virtual void SetGridObject(object gridObject)
     {
         this.gridObject = gridObject;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         textMeshPro.SetText(gridObject.ToString());
     }
