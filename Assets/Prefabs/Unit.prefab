@@ -558,7 +558,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1e3db837e4c2944b16ece335f9aa76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionPointsMax: 2
   isEnemy: 0
 --- !u!65 &1758746788548198921
 BoxCollider:
@@ -618,6 +617,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 161f60b0cbf385145958d29f4fec56d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obstaclesLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &4581930704909395206
 MonoBehaviour:
   m_ObjectHideFlags: 0

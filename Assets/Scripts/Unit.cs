@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 
 public class Unit : MonoBehaviour
 {
+    private const int ACTION_POINTS_MAX = 2;
     public static event EventHandler OnAnyActionPointsChanged;
     public static event EventHandler OnAnyUnitSpawned;
     public static event EventHandler OnAnyUnitDead;
@@ -14,14 +15,13 @@ public class Unit : MonoBehaviour
     private BaseAction[] baseActionArray;
     private int actionPoints;
 
-    [SerializeField] private int actionPointsMax = 2;
     [SerializeField] private bool isEnemy;
 
     private void Awake()
     {
         healthSystem = GetComponent<HealthSystem>();
         baseActionArray = GetComponents<BaseAction>();
-        actionPoints = actionPointsMax;
+        actionPoints = ACTION_POINTS_MAX;
     }
 
     private void Start()
@@ -41,7 +41,7 @@ public class Unit : MonoBehaviour
     {
         if ((IsEnemy() &&! TurnSystem.Instance.IsPlayerTurn()) || (!IsEnemy() && TurnSystem.Instance.IsPlayerTurn()))
         {
-            actionPoints = actionPointsMax;
+            actionPoints = ACTION_POINTS_MAX;
 
             OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
         }
