@@ -9,6 +9,7 @@ public class GridObject
 
     private bool hasUnit;
     private List<Unit> unitList;
+    private IInteractable interactable;
 
     public event EventHandler OnUnitAdded;
     public event EventHandler OnUnitRemoved;
@@ -85,5 +86,15 @@ public class GridObject
         {
             return null;
         }
+    }
+
+    public IInteractable GetInteractable()
+    {
+        return interactable;
+    }
+
+    public void SetInteractable(IInteractable interactable)
+    {
+        this.interactable = interactable;
     }
 }
