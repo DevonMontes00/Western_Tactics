@@ -16,6 +16,7 @@ public class Unit : MonoBehaviour
     private int actionPoints;
 
     [SerializeField] private bool isEnemy;
+    [SerializeField] private int coverPoints;
 
     private void Awake()
     {
@@ -144,5 +145,14 @@ public class Unit : MonoBehaviour
     public float GetHealthNormalized()
     {
         return healthSystem.GetHealthNormalized();
+    }
+    
+    public void SetCoverPoints(int coverPoints)
+    {
+        this.coverPoints = coverPoints;
+    }
+    public double GetCoverPoints()
+    {
+        return coverPoints;
     }
 }

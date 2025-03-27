@@ -59,6 +59,13 @@ public class MoveAction : BaseAction
             positionList.Add(LevelGrid.Instance.GetWorldPosition(pathGridPositon));
         }
 
+        GridObject go = LevelGrid.Instance.GetGridObject(gridPosition);
+
+        Debug.Log($"Cover Points North for target: {go.GetCoverPointsNorth()}; " +
+            $"Cover Points South for target: {go.GetCoverPointsSouth()}; " +
+            $"Cover Points West for target: {go.GetCoverPointsWest()}; " +
+            $"Cover Points East for target: {go.GetCoverPointsEast()};");
+
         OnStartMoving?.Invoke(this, EventArgs.Empty);
         ActionStart(onActionComplete);
     }
@@ -129,5 +136,10 @@ public class MoveAction : BaseAction
             gridPosition = gridPosition,
             actionValue = targetCountAtGridPosition * 10,
         };
+    }
+
+    public int GetMaxMoveDistance()
+    {
+        return maxMoveDistance;
     }
 }

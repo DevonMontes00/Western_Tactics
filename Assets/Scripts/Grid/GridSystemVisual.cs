@@ -69,7 +69,8 @@ public class GridSystemVisual : MonoBehaviour
     {
         foreach (GridSystemVisualSingle visual in gridSystemVisualSinglesArray) 
         {
-            visual.Hide();
+            visual.HideMesh();
+            visual.HideAllShields();
         }
     }
     private void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
@@ -120,11 +121,72 @@ public class GridSystemVisual : MonoBehaviour
 
         ShowGridPositionList(gridPositionList, gridVisualType);
     }
+
+    private void ShowGridPositionCoverVisuals(GridPosition gridPosition, int range)
+    {
+        List<GridPosition> gridPositionList = new List<GridPosition>();
+        for (int x = -range; x <= range; x++)
+        {
+            for (int z = -range; z <= range; z++)
+            {
+                GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
+
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                {
+                    continue;
+                }
+
+                int testDistance = Mathf.Abs(x) + Math.Abs(z);
+                if (testDistance > range)
+                {
+                    //Calculating for a circular radius
+                    continue;
+                }
+
+                if(LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsNorth() < 0 &&
+                    LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsSouth() < 0 &&
+                    LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsEast() < 0 &&
+                    LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsWest() < 0)
+                {
+                    //No cover points in any direction
+                    continue;
+                }
+
+                gridPositionList.Add(testGridPosition);
+            }
+        }
+
+        
+
+        foreach (GridPosition testGridPosition in gridPositionList)
+        {
+            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsNorth() > 0)
+            {
+                gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowSouthShield();
+            }
+
+            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsSouth() > 0)
+            {
+                gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowNorthShield();
+            }
+
+            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsWest() > 0)
+            {
+                gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowEastShield();
+            }
+
+            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsEast() > 0)
+            {
+                gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowWestShield();
+            }
+        }
+    }
+
     public void ShowGridPositionList(List<GridPosition> gridPositionsList, GridVisualType gridVisualType)
     {
         foreach(GridPosition gridPosition in gridPositionsList)
         {
-            gridSystemVisualSinglesArray[gridPosition.x, gridPosition.z].Show(GetGridVisualTypeMaterial(gridVisualType));
+            gridSystemVisualSinglesArray[gridPosition.x, gridPosition.z].ShowMesh(GetGridVisualTypeMaterial(gridVisualType));
         }
     }
 
@@ -138,9 +200,9 @@ public class GridSystemVisual : MonoBehaviour
         GridVisualType gridVisualType;
         switch(selectedAction)
         {
-            default:
             case MoveAction moveAction:
-                gridVisualType = GridVisualType.White; 
+                gridVisualType = GridVisualType.White;
+                ShowGridPositionCoverVisuals(selectedUnit.GetGridPosition(), moveAction.GetMaxMoveDistance());
                 break;
             case SpinAction spinAction:
                 gridVisualType = GridVisualType.Blue;
@@ -159,11 +221,14 @@ public class GridSystemVisual : MonoBehaviour
             case InteractAction interactAction:
                 gridVisualType = GridVisualType.Blue;
                 break;
+            default:
+                gridVisualType = GridVisualType.White;
+                break;
         }
         ShowGridPositionList(selectedAction.GetValidActionGridPositionList(), gridVisualType);
     }
 
-    private void UnitActionSystem_OnSelectedActionChanged(object sender, System.EventArgs e)
+    private void UnitActionSystem_OnSelectedActionChanged(object sender, EventArgs e)
     {
         UpdateGridVisual();
     }

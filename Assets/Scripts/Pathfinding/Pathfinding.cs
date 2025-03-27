@@ -48,12 +48,71 @@ public class Pathfinding : MonoBehaviour
                 GridPosition gridPosition = new GridPosition(x,z);
                 Vector3 worldPositon = LevelGrid.Instance.GetWorldPosition(gridPosition);
                 float raycastOffsetDistance = 5f;
-                if(Physics.Raycast(worldPositon + Vector3.down * raycastOffsetDistance, Vector3.up, raycastOffsetDistance * 2, obstaclesLayerMask))
+                if(Physics.Raycast(worldPositon + Vector3.down * raycastOffsetDistance, Vector3.up, out RaycastHit hit, raycastOffsetDistance * 2, obstaclesLayerMask))
                 {
                     GetNode(x,z).SetIsWalkable(false);
+
+                    GameObject hitObstacle = hit.collider.gameObject;
+
+                    if(hitObstacle.TryGetComponent<CoverObject>(out CoverObject coverObject))
+                    {
+                        double coverPoints = coverObject.GetCoverPoints();
+
+                        CheckForCoverNodes(gridPosition, coverPoints);
+                    }
                 }
             }
         }
+    }
+
+    private void CheckForCoverNodes(GridPosition gridPosition, double coverPoints)
+    {
+        if (GetNode(gridPosition.x + 1, gridPosition.z).IsWalkable())
+        {
+            SetGridObjectCoverPoints(gridPosition.x + 1, gridPosition.z , coverPoints, GridObject.CoverDirection.East);
+        }
+
+        if (GetNode(gridPosition.x, gridPosition.z + 1).IsWalkable())
+        {
+            SetGridObjectCoverPoints(gridPosition.x, gridPosition.z + 1, coverPoints, GridObject.CoverDirection.North);
+        }
+
+        if (GetNode(gridPosition.x - 1, gridPosition.z).IsWalkable())
+        {
+            SetGridObjectCoverPoints(gridPosition.x - 1, gridPosition.z, coverPoints, GridObject.CoverDirection.West);
+        }
+
+        if (GetNode(gridPosition.x, gridPosition.z - 1).IsWalkable())
+        {
+            SetGridObjectCoverPoints(gridPosition.x, gridPosition.z - 1, coverPoints, GridObject.CoverDirection.South);
+        }
+    }
+
+    private void SetGridObjectCoverPoints(int x, int z, double coverPoints, GridObject.CoverDirection direction)
+    {
+        GridPosition tempGridPosition = new GridPosition(x, z);
+
+        GridObject gridObject = LevelGrid.Instance.GetGridObject(tempGridPosition);
+
+        switch(direction)
+        {
+            case GridObject.CoverDirection.North:
+                gridObject.SetCoverPointsNorth(coverPoints);
+                break;
+
+            case GridObject.CoverDirection.South:
+                gridObject.SetCoverPointsSouth(coverPoints);
+                break;
+
+            case GridObject.CoverDirection.West:
+                gridObject.SetCoverPointsWest(coverPoints);
+                break;
+
+            case GridObject.CoverDirection.East:
+                gridObject.SetCoverPointsEast(coverPoints);
+                break;
+        }
+        
     }
 
     public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition, out int pathLength)

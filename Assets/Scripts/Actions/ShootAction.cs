@@ -19,7 +19,10 @@ public class ShootAction : BaseAction
         Shooting,
         Cooloff,
     }
+
     [SerializeField] private LayerMask obstaclesLayerMask;
+    [SerializeField] private int guarenteedHitDistance = 2;
+
     private State state;
     private int maxShootDistance = 7;
     private float stateTimer;
@@ -103,7 +106,71 @@ public class ShootAction : BaseAction
             targetUnit = targetUnit,
             shootingUnit = unit,
         });
-        targetUnit.Damage(40);
+
+        if(AttackHits())
+        {
+            targetUnit.Damage(40);
+            Debug.Log("Attack hit");
+        }
+
+        else
+        {
+            Debug.Log("Attack miss");
+        }
+        
+    }
+
+    private bool AttackHits()
+    {
+        double attackAccuracy = CalculateAttackAccuracy(unit.GetGridPosition(), targetUnit.GetGridPosition());
+        
+
+        System.Random r = new System.Random();
+        int num = r.Next(0, 100);
+
+        Debug.Log($"Random Number: {num}");
+
+        if (attackAccuracy > num)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+
+    }
+
+    private double CalculateAttackAccuracy(GridPosition shootingUnitGridPosition, GridPosition targetUnitGridPosition)
+    {
+        double attackAccuracy;
+
+        double baseAccuracy = 1.0;
+        double targetAccuracy = 0.5;
+        double targetDistance = 7.0;
+
+        //This coverFactor reduces accuracy at a perdictable amount. 5 cover points cuts accuracy in half
+        double coverFactor = 0.1386;
+
+        double k = -Math.Log(targetAccuracy / baseAccuracy) / targetDistance;
+
+        int attackDistance = (Pathfinding.Instance.CalculateDistance(shootingUnitGridPosition, targetUnitGridPosition)) / 10;
+
+        if (attackDistance < guarenteedHitDistance)
+        {
+            attackAccuracy = 100;
+            return attackAccuracy;
+        }
+
+        else
+        {
+            attackAccuracy = baseAccuracy * Math.Exp(-k * attackDistance + coverFactor * targetUnit.GetCoverPoints()); 
+        }
+
+        Debug.Log($"Attack Distance: {attackDistance}, Accuracy {attackAccuracy}");
+
+        return attackAccuracy * 100;
     }
 
     public override string GetActionName()

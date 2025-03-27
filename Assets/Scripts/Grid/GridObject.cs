@@ -11,6 +11,19 @@ public class GridObject
     private List<Unit> unitList;
     private IInteractable interactable;
 
+    public enum CoverDirection
+    {
+        North,
+        South,
+        West,
+        East,
+    }
+    
+    private double coverPointsNorth;
+    private double coverPointsSouth;
+    private double coverPointsWest;
+    private double coverPointsEast;
+
     public event EventHandler OnUnitAdded;
     public event EventHandler OnUnitRemoved;
 
@@ -96,5 +109,44 @@ public class GridObject
     public void SetInteractable(IInteractable interactable)
     {
         this.interactable = interactable;
+    }
+
+    public double GetCoverPointsNorth()
+    {
+        return coverPointsNorth;
+    }
+
+    public void SetCoverPointsNorth(double coverPointsNorth)
+    {
+        this.coverPointsNorth = coverPointsNorth;
+    }
+
+    public double GetCoverPointsSouth()
+    {
+        return coverPointsSouth;
+    }
+
+    public void SetCoverPointsSouth(double coverPointsSouth)
+    {
+        this.coverPointsSouth = coverPointsSouth;
+    }
+    public double GetCoverPointsEast()
+    {
+        return coverPointsEast;
+    }
+
+    public void SetCoverPointsEast(double coverPointsEast)
+    {
+        this.coverPointsEast = coverPointsEast;
+    }
+
+    public double GetCoverPointsWest()
+    {
+        return coverPointsWest;
+    }
+
+    public void SetCoverPointsWest(double coverPointsWest)
+    {
+        this.coverPointsWest = coverPointsWest;
     }
 }
