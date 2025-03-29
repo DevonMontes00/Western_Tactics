@@ -10,15 +10,13 @@ public class CoverSystem : MonoBehaviour
     [SerializeField] private double westCoverPoints;
     [SerializeField] private double eastCoverPoints;
 
-    private CoverObject[] coverObjectArray;
-
     public void SetStartingCoverPoints(GridPosition gridPosition)
     {
         GridObject gridObject = LevelGrid.Instance.GetGridObject(gridPosition);
         SetNorthCoverPoints(gridObject.GetSouthCoverPoints());
         SetSouthCoverPoints(gridObject.GetNorthCoverPoints());
         SetEastCoverPoints(gridObject.GetWestCoverPoints());
-        SetWestCoverPoints(gridObject.GetWestCoverPoints());
+        SetWestCoverPoints(gridObject.GetEastCoverPoints());
     }
 
     public void SetNorthCoverPoints(double northCoverPoints)

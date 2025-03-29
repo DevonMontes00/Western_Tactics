@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Unity.Mathematics;
+using static UnityEngine.UI.CanvasScaler;
 
 public class GridSystemVisual : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class GridSystemVisual : MonoBehaviour
     [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterialList;
 
     private GridSystemVisualSingle[,] gridSystemVisualSinglesArray;
+    //private List<GridPosition> coverSystemGridPositions = new List<GridPosition>();
 
     private void Awake()
     {
@@ -130,27 +132,43 @@ public class GridSystemVisual : MonoBehaviour
             for (int z = -range; z <= range; z++)
             {
                 GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
-
+                
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
                 {
                     continue;
                 }
 
-                int testDistance = Mathf.Abs(x) + Math.Abs(z);
-                if (testDistance > range)
+                if (LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition))
                 {
-                    //Calculating for a circular radius
+                    //Grid position already occupied with another unit
                     continue;
                 }
 
-                if(LevelGrid.Instance.GetGridObject(testGridPosition).GetNorthCoverPoints() < 0 &&
+                if (!Pathfinding.Instance.IsWalkableGridPosition(testGridPosition))
+                {
+                    continue;
+                }
+
+                if (!Pathfinding.Instance.HasPath(gridPosition, testGridPosition))
+                {
+                    continue;
+                }
+
+                int pathfindingDistanceMultiplyer = 10;
+                if (Pathfinding.Instance.GetPathLength(gridPosition, testGridPosition) > range * pathfindingDistanceMultiplyer)
+                {
+                    //Path length is too long
+                    continue;
+                }
+
+                /*if (LevelGrid.Instance.GetGridObject(testGridPosition).GetNorthCoverPoints() < 0 &&
                     LevelGrid.Instance.GetGridObject(testGridPosition).GetSouthCoverPoints() < 0 &&
                     LevelGrid.Instance.GetGridObject(testGridPosition).GetEastCoverPoints() < 0 &&
                     LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() < 0)
                 {
                     //No cover points in any direction
                     continue;
-                }
+                }*/
 
                 gridPositionList.Add(testGridPosition);
             }
@@ -162,22 +180,55 @@ public class GridSystemVisual : MonoBehaviour
         {
             if (LevelGrid.Instance.GetGridObject(testGridPosition).GetNorthCoverPoints() > 0)
             {
-                gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowSouthShield();
+
+                if (LevelGrid.Instance.GetGridObject(testGridPosition).GetNorthCoverPoints() == 2.5)
+                {
+                    gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowHalfCoverSouthShield();
+                }
+
+                if (LevelGrid.Instance.GetGridObject(testGridPosition).GetNorthCoverPoints() == 5)
+                {
+                    gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowFullCoverSouthShield();
+                }
             }
 
             if (LevelGrid.Instance.GetGridObject(testGridPosition).GetSouthCoverPoints() > 0)
             {
-                gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowNorthShield();
+                if (LevelGrid.Instance.GetGridObject(testGridPosition).GetSouthCoverPoints() == 2.5)
+                {
+                    gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowHalfCoverNorthShield();
+                }
+
+                if (LevelGrid.Instance.GetGridObject(testGridPosition).GetSouthCoverPoints() == 5)
+                {
+                    gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowFullCoverNorthShield();
+                }
             }
 
             if (LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() > 0)
             {
-                gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowEastShield();
+                if (LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() == 2.5)
+                {
+                    gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowHalfCoverEastShield();
+                }
+
+                if (LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() == 5)
+                {
+                    gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowFullCoverEastShield();
+                }
             }
 
             if (LevelGrid.Instance.GetGridObject(testGridPosition).GetEastCoverPoints() > 0)
             {
-                gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowWestShield();
+                if (LevelGrid.Instance.GetGridObject(testGridPosition).GetEastCoverPoints() == 2.5)
+                {
+                    gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowHalfCoverWestShield();
+                }
+
+                if (LevelGrid.Instance.GetGridObject(testGridPosition).GetEastCoverPoints() == 5)
+                {
+                    gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowFullCoverWestShield();
+                }
             }
         }
     }

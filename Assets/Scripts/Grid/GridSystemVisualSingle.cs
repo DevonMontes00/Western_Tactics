@@ -3,10 +3,15 @@ using UnityEngine;
 public class GridSystemVisualSingle : MonoBehaviour
 {
     [SerializeField] private MeshRenderer meshRender;
-    [SerializeField] private MeshRenderer planeShieldNorth;
-    [SerializeField] private MeshRenderer planeShieldSouth;
-    [SerializeField] private MeshRenderer planeShieldWest;
-    [SerializeField] private MeshRenderer planeShieldEast;
+    [SerializeField] private MeshRenderer fullCoverShieldNorth;
+    [SerializeField] private MeshRenderer fullCoverShieldSouth;
+    [SerializeField] private MeshRenderer fullCoverShieldEast;
+    [SerializeField] private MeshRenderer fullCoverShieldWest;
+
+    [SerializeField] private MeshRenderer halfCoverShieldNorth;
+    [SerializeField] private MeshRenderer halfCoverShieldSouth;
+    [SerializeField] private MeshRenderer halfCoverShieldEast;
+    [SerializeField] private MeshRenderer halfCoverShieldWest;
 
     public void ShowMesh(Material material)
     {
@@ -19,52 +24,97 @@ public class GridSystemVisualSingle : MonoBehaviour
         meshRender.enabled = false;
     }
 
-    public void ShowNorthShield()
+    public void ShowFullCoverNorthShield()
     {
-        planeShieldNorth.enabled = true;
+        fullCoverShieldNorth.enabled = true;
     }
 
-    public void HideNorthShield()
+    public void HideFullCoverNorthShield()
     {
-        planeShieldNorth.enabled = false;
+        fullCoverShieldNorth.enabled = false;
     }
 
-    public void ShowSouthShield()
+    public void ShowFullCoverSouthShield()
     {
-        planeShieldSouth.enabled = true;
+        fullCoverShieldSouth.enabled = true;
     }
 
-    public void HideSouthShield()
+    public void HideFullCoverSouthShield()
     {
-        planeShieldSouth.enabled = false;
+        fullCoverShieldSouth.enabled = false;
     }
 
-    public void ShowWestShield()
+    public void ShowFullCoverEastShield()
     {
-        planeShieldWest.enabled = true;
+        fullCoverShieldEast.enabled = true;
     }
 
-    public void HideWestShield()
+    public void HideFullCoverEastShield()
     {
-        planeShieldWest.enabled = false;
+        fullCoverShieldEast.enabled = false;
     }
 
-    public void ShowEastShield()
+    public void ShowFullCoverWestShield()
     {
-        planeShieldEast.enabled = true;
+        fullCoverShieldWest.enabled = true;
     }
 
-    public void HideEastShield()
+    public void HideFullCoverWestShield()
     {
-        planeShieldEast.enabled = false;
+        fullCoverShieldWest.enabled = false;
+    }
+
+    public void ShowHalfCoverNorthShield()
+    {
+        halfCoverShieldNorth.enabled = true;
+    }
+
+    public void HideHalfCoverNorthShield()
+    {
+        halfCoverShieldNorth.enabled = false;
+    }
+
+    public void ShowHalfCoverSouthShield()
+    {
+        halfCoverShieldSouth.enabled = true;
+    }
+
+    public void HideHalfCoverSouthShield()
+    {
+        halfCoverShieldSouth.enabled = false;
+    }
+
+    public void ShowHalfCoverEastShield()
+    {
+        halfCoverShieldEast.enabled = true;
+    }
+
+    public void HideHalfCoverEastShield()
+    {
+        halfCoverShieldEast.enabled = false;
+    }
+
+    public void ShowHalfCoverWestShield()
+    {
+        halfCoverShieldWest.enabled = true;
+    }
+
+    public void HideHalfCoverWestShield()
+    {
+        halfCoverShieldWest.enabled = false;
     }
 
     public void HideAllShields()
     {
-        planeShieldNorth.enabled = false;
-        planeShieldSouth.enabled = false;
-        planeShieldEast.enabled = false;
-        planeShieldWest.enabled = false;    
+        HideFullCoverNorthShield();
+        HideFullCoverSouthShield();
+        HideFullCoverWestShield();
+        HideFullCoverEastShield();
+
+        HideHalfCoverNorthShield();
+        HideHalfCoverSouthShield();
+        HideHalfCoverEastShield();
+        HideHalfCoverWestShield();
     }
 
 }
