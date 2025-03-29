@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class GridObject
 {
@@ -19,10 +18,10 @@ public class GridObject
         East,
     }
     
-    private double coverPointsNorth;
-    private double coverPointsSouth;
-    private double coverPointsWest;
-    private double coverPointsEast;
+    private double northCoverPoints = 0;
+    private double southCoverPoints = 0;
+    private double westCoverPoints = 0;
+    private double eastCoverPoints = 0;
 
     public event EventHandler OnUnitAdded;
     public event EventHandler OnUnitRemoved;
@@ -111,42 +110,42 @@ public class GridObject
         this.interactable = interactable;
     }
 
-    public double GetCoverPointsNorth()
+    public double GetNorthCoverPoints()
     {
-        return coverPointsNorth;
+        return northCoverPoints;
     }
 
-    public void SetCoverPointsNorth(double coverPointsNorth)
+    public void SetNorthCoverPoints(double coverPointsNorth)
     {
-        this.coverPointsNorth = coverPointsNorth;
+        this.northCoverPoints = coverPointsNorth;
     }
 
-    public double GetCoverPointsSouth()
+    public double GetSouthCoverPoints()
     {
-        return coverPointsSouth;
+        return southCoverPoints;
     }
 
-    public void SetCoverPointsSouth(double coverPointsSouth)
+    public void SetSouthCoverPoints(double coverPointsSouth)
     {
-        this.coverPointsSouth = coverPointsSouth;
+        this.southCoverPoints = coverPointsSouth;
     }
-    public double GetCoverPointsEast()
+    public double GetEastCoverPoints()
     {
-        return coverPointsEast;
-    }
-
-    public void SetCoverPointsEast(double coverPointsEast)
-    {
-        this.coverPointsEast = coverPointsEast;
+        return eastCoverPoints;
     }
 
-    public double GetCoverPointsWest()
+    public void SetEastCoverPoints(double coverPointsEast)
     {
-        return coverPointsWest;
+        this.eastCoverPoints = coverPointsEast;
     }
 
-    public void SetCoverPointsWest(double coverPointsWest)
+    public double GetWestCoverPoints()
     {
-        this.coverPointsWest = coverPointsWest;
+        return westCoverPoints;
+    }
+
+    public void SetWestCoverPoints(double coverPointsWest)
+    {
+        this.westCoverPoints = coverPointsWest;
     }
 }

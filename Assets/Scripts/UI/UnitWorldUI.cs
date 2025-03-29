@@ -5,17 +5,27 @@ using UnityEngine.UI;
 
 public class UnitWorldUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI actioPointsText;
+    [SerializeField] private TextMeshProUGUI actionPointsText;
     [SerializeField] private Unit unit;
     [SerializeField] private Image healthBarImage;
     [SerializeField] private HealthSystem healthSystem;
+    [SerializeField] private CoverSystem coverSystem;
+    [SerializeField] private GameObject coverIndicator;
 
     private void Start()
     {
         Unit.OnAnyActionPointsChanged += Unit_OnAnyActionPointsChanged;
         healthSystem.OnDamaged += HealthSystem_OnDamaged;
+        coverSystem.OnAnyCoverPointsChanged += CoverSystem_OnAnyCoverPointsChanged;
+
         UpdateActionPointsText();
         UpdateHealthBar();
+        UpdateCoverIndicator();
+    }
+
+    private void CoverSystem_OnAnyCoverPointsChanged(object sender, EventArgs e)
+    {
+        UpdateCoverIndicator();
     }
 
     private void Unit_OnAnyActionPointsChanged(object sender, EventArgs e)
@@ -25,7 +35,7 @@ public class UnitWorldUI : MonoBehaviour
 
     private void UpdateActionPointsText()
     {
-        actioPointsText.text = unit.GetActionPoints().ToString();
+        actionPointsText.text = unit.GetActionPoints().ToString();
     }
 
     private void UpdateHealthBar()
@@ -36,5 +46,18 @@ public class UnitWorldUI : MonoBehaviour
     private void HealthSystem_OnDamaged(object sender, EventArgs e)
     {
         UpdateHealthBar();
+    }
+
+    private void UpdateCoverIndicator()
+    {
+        if(unit.GetCoverSystem().IsInCover())
+        {
+            coverIndicator.SetActive(true);
+        }
+
+        else
+        {
+            coverIndicator.SetActive(false);
+        }
     }
 }

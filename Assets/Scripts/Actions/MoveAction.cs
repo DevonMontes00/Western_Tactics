@@ -40,6 +40,7 @@ public class MoveAction : BaseAction
             if (currentPositionIndex >= positionList.Count)
             {
                 OnStopMoving?.Invoke(this, EventArgs.Empty);
+                UpdateUnitCoverPoints(targetPosition);
                 ActionComplete();
             }
         }
@@ -59,12 +60,7 @@ public class MoveAction : BaseAction
             positionList.Add(LevelGrid.Instance.GetWorldPosition(pathGridPositon));
         }
 
-        GridObject go = LevelGrid.Instance.GetGridObject(gridPosition);
-
-        Debug.Log($"Cover Points North for target: {go.GetCoverPointsNorth()}; " +
-            $"Cover Points South for target: {go.GetCoverPointsSouth()}; " +
-            $"Cover Points West for target: {go.GetCoverPointsWest()}; " +
-            $"Cover Points East for target: {go.GetCoverPointsEast()};");
+        GridObject go = LevelGrid.Instance.GetGridObject(gridPosition);;
 
         OnStartMoving?.Invoke(this, EventArgs.Empty);
         ActionStart(onActionComplete);
@@ -141,5 +137,16 @@ public class MoveAction : BaseAction
     public int GetMaxMoveDistance()
     {
         return maxMoveDistance;
+    }
+
+    private void UpdateUnitCoverPoints(Vector3 targetPosition)
+    {
+        GridPosition gp = LevelGrid.Instance.GetGridPosition(targetPosition);
+        GridObject go = LevelGrid.Instance.GetGridObject(gp);
+
+        unit.GetCoverSystem().SetNorthCoverPoints(go.GetNorthCoverPoints());
+        unit.GetCoverSystem().SetSouthCoverPoints(go.GetSouthCoverPoints());
+        unit.GetCoverSystem().SetWestCoverPoints(go.GetWestCoverPoints());
+        unit.GetCoverSystem().SetNorthCoverPoints(go.GetEastCoverPoints());
     }
 }

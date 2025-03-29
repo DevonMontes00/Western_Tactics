@@ -97,19 +97,19 @@ public class Pathfinding : MonoBehaviour
         switch(direction)
         {
             case GridObject.CoverDirection.North:
-                gridObject.SetCoverPointsNorth(coverPoints);
+                gridObject.SetNorthCoverPoints(coverPoints);
                 break;
 
             case GridObject.CoverDirection.South:
-                gridObject.SetCoverPointsSouth(coverPoints);
+                gridObject.SetSouthCoverPoints(coverPoints);
                 break;
 
             case GridObject.CoverDirection.West:
-                gridObject.SetCoverPointsWest(coverPoints);
+                gridObject.SetWestCoverPoints(coverPoints);
                 break;
 
             case GridObject.CoverDirection.East:
-                gridObject.SetCoverPointsEast(coverPoints);
+                gridObject.SetEastCoverPoints(coverPoints);
                 break;
         }
         

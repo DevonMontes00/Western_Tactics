@@ -12,16 +12,17 @@ public class Unit : MonoBehaviour
 
     private GridPosition gridPosition;
     private HealthSystem healthSystem;
+    private CoverSystem coverSystem;
     private BaseAction[] baseActionArray;
     private int actionPoints;
 
     [SerializeField] private bool isEnemy;
-    [SerializeField] private int coverPoints;
 
     private void Awake()
     {
         healthSystem = GetComponent<HealthSystem>();
         baseActionArray = GetComponents<BaseAction>();
+        coverSystem = GetComponent<CoverSystem>();
         actionPoints = ACTION_POINTS_MAX;
     }
 
@@ -36,7 +37,11 @@ public class Unit : MonoBehaviour
         healthSystem.OnDead += HealthSystem_OnDead;
 
         OnAnyUnitSpawned?.Invoke(this, EventArgs.Empty);
+
+        coverSystem.SetStartingCoverPoints(gridPosition);
     }
+
+    
 
     private void TurnSystem_OnTurnChanged(object sender, System.EventArgs e)
     {
@@ -146,13 +151,9 @@ public class Unit : MonoBehaviour
     {
         return healthSystem.GetHealthNormalized();
     }
-    
-    public void SetCoverPoints(int coverPoints)
+
+    public CoverSystem GetCoverSystem()
     {
-        this.coverPoints = coverPoints;
-    }
-    public double GetCoverPoints()
-    {
-        return coverPoints;
+        return coverSystem;
     }
 }

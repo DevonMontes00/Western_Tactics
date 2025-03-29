@@ -20,8 +20,15 @@ public class ShootAction : BaseAction
         Cooloff,
     }
 
+    private enum AttackDirection
+    {
+        North,
+        South,
+        East,
+        West,
+    }
+
     [SerializeField] private LayerMask obstaclesLayerMask;
-    [SerializeField] private int guarenteedHitDistance = 2;
 
     private State state;
     private int maxShootDistance = 7;
@@ -123,10 +130,11 @@ public class ShootAction : BaseAction
     private bool AttackHits()
     {
         double attackAccuracy = CalculateAttackAccuracy(unit.GetGridPosition(), targetUnit.GetGridPosition());
-        
+        Debug.Log($"Attack Accuracy: {attackAccuracy}");
+
 
         System.Random r = new System.Random();
-        int num = r.Next(0, 100);
+        double num = r.NextDouble();
 
         Debug.Log($"Random Number: {num}");
 
@@ -157,20 +165,71 @@ public class ShootAction : BaseAction
 
         int attackDistance = (Pathfinding.Instance.CalculateDistance(shootingUnitGridPosition, targetUnitGridPosition)) / 10;
 
-        if (attackDistance < guarenteedHitDistance)
+        AttackDirection attackDirection = CalculateAttackDirection();
+        double coverPoints = 0;
+
+        switch (attackDirection)
         {
-            attackAccuracy = 100;
-            return attackAccuracy;
+            case AttackDirection.North:
+                coverPoints = targetUnit.GetCoverSystem().GetSouthCoverPoints();
+                break;
+            case AttackDirection.South:
+                coverPoints = targetUnit.GetCoverSystem().GetNorthCoverPoints();
+                break;
+            case AttackDirection.East:
+                coverPoints = targetUnit.GetCoverSystem().GetWestCoverPoints();
+                break;
+            case AttackDirection.West:
+                coverPoints = targetUnit.GetCoverSystem().GetEastCoverPoints();
+                break;
+        }
+
+        attackAccuracy = baseAccuracy * Math.Exp(-(k * attackDistance + coverFactor * coverPoints));
+
+        Debug.Log($"Attack Distance: {attackDistance}");
+        Debug.Log($"Attack Direction: {attackDirection.ToString()}");
+        Debug.Log($"Target Unit Accounted Cover Points: {coverPoints}");
+        Debug.Log($"TU North: {targetUnit.GetCoverSystem().GetNorthCoverPoints()}; TU South: {targetUnit.GetCoverSystem().GetSouthCoverPoints()}; TU East: {targetUnit.GetCoverSystem().GetEastCoverPoints()}; TU West: {targetUnit.GetCoverSystem().GetWestCoverPoints()};");
+
+        return attackAccuracy;
+    }
+
+    private AttackDirection CalculateAttackDirection()
+    {
+        AttackDirection direction;
+
+        Vector3 aimDir = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
+
+        string cardinalNS = aimDir.z > 0 ? "North" : "South";
+        string cardianlEW = aimDir.x > 0 ? "East" : "West";
+
+        if (Math.Abs(aimDir.x) > Math.Abs(aimDir.z))
+        {
+            if(aimDir.x > 0)
+            {
+                direction = AttackDirection.East;
+            }
+
+            else
+            {
+                direction = AttackDirection.West;
+            }
         }
 
         else
         {
-            attackAccuracy = baseAccuracy * Math.Exp(-k * attackDistance + coverFactor * targetUnit.GetCoverPoints()); 
+            if (aimDir.z > 0)
+            {
+                direction = AttackDirection.North;
+            }
+
+            else
+            {
+                direction = AttackDirection.South;
+            }
         }
 
-        Debug.Log($"Attack Distance: {attackDistance}, Accuracy {attackAccuracy}");
-
-        return attackAccuracy * 100;
+        return direction;
     }
 
     public override string GetActionName()

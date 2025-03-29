@@ -143,10 +143,10 @@ public class GridSystemVisual : MonoBehaviour
                     continue;
                 }
 
-                if(LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsNorth() < 0 &&
-                    LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsSouth() < 0 &&
-                    LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsEast() < 0 &&
-                    LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsWest() < 0)
+                if(LevelGrid.Instance.GetGridObject(testGridPosition).GetNorthCoverPoints() < 0 &&
+                    LevelGrid.Instance.GetGridObject(testGridPosition).GetSouthCoverPoints() < 0 &&
+                    LevelGrid.Instance.GetGridObject(testGridPosition).GetEastCoverPoints() < 0 &&
+                    LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() < 0)
                 {
                     //No cover points in any direction
                     continue;
@@ -160,22 +160,22 @@ public class GridSystemVisual : MonoBehaviour
 
         foreach (GridPosition testGridPosition in gridPositionList)
         {
-            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsNorth() > 0)
+            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetNorthCoverPoints() > 0)
             {
                 gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowSouthShield();
             }
 
-            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsSouth() > 0)
+            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetSouthCoverPoints() > 0)
             {
                 gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowNorthShield();
             }
 
-            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsWest() > 0)
+            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() > 0)
             {
                 gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowEastShield();
             }
 
-            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetCoverPointsEast() > 0)
+            if (LevelGrid.Instance.GetGridObject(testGridPosition).GetEastCoverPoints() > 0)
             {
                 gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowWestShield();
             }

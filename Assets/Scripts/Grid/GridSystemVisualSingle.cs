@@ -3,10 +3,10 @@ using UnityEngine;
 public class GridSystemVisualSingle : MonoBehaviour
 {
     [SerializeField] private MeshRenderer meshRender;
-    [SerializeField] private SpriteRenderer shieldNorthSprite;
-    [SerializeField] private SpriteRenderer shieldSouthSprite;
-    [SerializeField] private SpriteRenderer shieldWestSprite;
-    [SerializeField] private SpriteRenderer shieldEastSprite;
+    [SerializeField] private MeshRenderer planeShieldNorth;
+    [SerializeField] private MeshRenderer planeShieldSouth;
+    [SerializeField] private MeshRenderer planeShieldWest;
+    [SerializeField] private MeshRenderer planeShieldEast;
 
     public void ShowMesh(Material material)
     {
@@ -21,50 +21,50 @@ public class GridSystemVisualSingle : MonoBehaviour
 
     public void ShowNorthShield()
     {
-        shieldNorthSprite.enabled = true;
+        planeShieldNorth.enabled = true;
     }
 
     public void HideNorthShield()
     {
-        shieldNorthSprite.enabled = false;
+        planeShieldNorth.enabled = false;
     }
 
     public void ShowSouthShield()
     {
-        shieldSouthSprite.enabled = true;
+        planeShieldSouth.enabled = true;
     }
 
     public void HideSouthShield()
     {
-        shieldSouthSprite.enabled = false;
+        planeShieldSouth.enabled = false;
     }
 
     public void ShowWestShield()
     {
-        shieldWestSprite.enabled = true;
+        planeShieldWest.enabled = true;
     }
 
     public void HideWestShield()
     {
-        shieldWestSprite.enabled = false;
+        planeShieldWest.enabled = false;
     }
 
     public void ShowEastShield()
     {
-        shieldEastSprite.enabled = true;
+        planeShieldEast.enabled = true;
     }
 
     public void HideEastShield()
     {
-        shieldEastSprite.enabled = false;
+        planeShieldEast.enabled = false;
     }
 
     public void HideAllShields()
     {
-        shieldNorthSprite.enabled = false;
-        shieldSouthSprite.enabled = false;
-        shieldEastSprite.enabled = false;
-        shieldWestSprite.enabled = false;    
+        planeShieldNorth.enabled = false;
+        planeShieldSouth.enabled = false;
+        planeShieldEast.enabled = false;
+        planeShieldWest.enabled = false;    
     }
 
 }
