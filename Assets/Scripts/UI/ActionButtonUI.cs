@@ -1,9 +1,12 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class ActionButtonUI : MonoBehaviour
 {
+    public static event EventHandler<BaseAction> OnAnyActionButtonPressed;
+
     [SerializeField] private TextMeshProUGUI textMeshPro;
     [SerializeField] private Button button;
     [SerializeField] private GameObject selectedGameObject;
@@ -18,6 +21,7 @@ public class ActionButtonUI : MonoBehaviour
         button.onClick.AddListener(() =>
         {
             UnitActionSystem.Instance.SetSelectedAction(baseAction);
+            OnAnyActionButtonPressed?.Invoke(this, baseAction);
         });
     }
 
@@ -30,5 +34,10 @@ public class ActionButtonUI : MonoBehaviour
     public string GetButtonText()
     {
         return textMeshPro.text;
+    }
+
+    public BaseAction GetBaseAction()
+    {
+        return baseAction;
     }
 }

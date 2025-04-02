@@ -58,6 +58,15 @@ public class UnitActionSystem : MonoBehaviour
             return;
         }
 
+        if (InputManager.Instance.IsEscapeDownThisFrame())
+        {
+            if(CameraManager.Instance.IsActionCameraActive())
+            {
+                CameraManager.Instance.HideActionCamera();
+                
+            }
+        }
+
         HandleSelectedAction();
 
     }

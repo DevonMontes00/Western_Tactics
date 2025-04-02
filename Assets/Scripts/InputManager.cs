@@ -115,4 +115,14 @@ public class InputManager : MonoBehaviour
         return zoomAmount;
 #endif
     }
+
+    public bool IsEscapeDownThisFrame()
+    {
+#if USE_NEW_INPUT_SYSTEM
+        return playerInputActions.Player.Escape.WasPressedThisFrame();
+#else
+        return Input.GetKeyDown(KeyCode.Escape);
+#endif
+    }
+
 }

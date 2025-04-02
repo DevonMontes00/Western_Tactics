@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEngine.UI.CanvasScaler;
 
 public class Unit : MonoBehaviour
 {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class ShootAction : BaseAction
 {
@@ -35,6 +36,7 @@ public class ShootAction : BaseAction
     private float stateTimer;
     private Unit targetUnit;
     private bool canShootBullet;
+    private List<Unit> validTargets = new List<Unit>();
 
     private void Update()
     {
@@ -95,6 +97,7 @@ public class ShootAction : BaseAction
 
     private void Aim()
     {
+        Debug.Log("testing");
         Vector3 aimDir = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
         float rotateSpeed = 10f;
         transform.forward = Vector3.Lerp(transform.forward, aimDir, Time.deltaTime * rotateSpeed);
@@ -295,6 +298,8 @@ public class ShootAction : BaseAction
                 };
 
                 validGridPositionList.Add(testGridPosition);
+                GridObject gridobject = LevelGrid.Instance.GetGridObject(testGridPosition);
+                validTargets.Add(gridobject.GetUnit());
             }
         }
 
@@ -338,5 +343,22 @@ public class ShootAction : BaseAction
     public int GetTargetCountAtPosition(GridPosition gridPosition)
     {
         return GetValidActionGridPositionList(gridPosition).Count;
+    }
+
+    public Unit GetClosestTarget()
+    {
+        return validTargets[0];
+    }
+
+    public void AimCharacterForActionCamera(Unit aimTarget)
+    {
+        Debug.Log("AimCharacterForActionCamera called");
+        targetUnit = aimTarget;
+        state = State.Aiming;
+    }
+
+    public void StopAimForActionCamera(Unit aimTarget)
+    {
+        state = State.Cooloff;
     }
 }
