@@ -7,6 +7,7 @@ using UnityEngine.Animations;
 public class ShootAction : BaseAction
 {
     public static event EventHandler<OnShootEventArgs> OnAnyShoot;
+    public static event EventHandler<double> OnAnyAttackAccuracyChanged;
     public event EventHandler<OnShootEventArgs> OnShoot;
 
     public class OnShootEventArgs : EventArgs
@@ -35,8 +36,9 @@ public class ShootAction : BaseAction
     private int maxShootDistance = 7;
     private float stateTimer;
     private Unit targetUnit;
+    private double attackAccuracy;
     private bool canShootBullet;
-    private List<Unit> validTargets = new List<Unit>();
+    List<Unit> availableTargets = new List<Unit>();
 
     private void Update()
     {
@@ -97,7 +99,6 @@ public class ShootAction : BaseAction
 
     private void Aim()
     {
-        Debug.Log("testing");
         Vector3 aimDir = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
         float rotateSpeed = 10f;
         transform.forward = Vector3.Lerp(transform.forward, aimDir, Time.deltaTime * rotateSpeed);
@@ -132,7 +133,8 @@ public class ShootAction : BaseAction
 
     private bool AttackHits()
     {
-        double attackAccuracy = CalculateAttackAccuracy(unit.GetGridPosition(), targetUnit.GetGridPosition());
+        double attackAccuracy = CalculateAttackAccuracy(targetUnit);
+        OnAnyAttackAccuracyChanged?.Invoke(this, attackAccuracy);
         Debug.Log($"Attack Accuracy: {attackAccuracy}");
 
 
@@ -153,8 +155,11 @@ public class ShootAction : BaseAction
 
     }
 
-    private double CalculateAttackAccuracy(GridPosition shootingUnitGridPosition, GridPosition targetUnitGridPosition)
+    private double CalculateAttackAccuracy(Unit targetUnit)
     {
+        GridPosition shootingUnitGridPosition = unit.GetGridPosition();
+        GridPosition targetUnitGridPosition = targetUnit.GetGridPosition();
+
         double attackAccuracy;
 
         double baseAccuracy = 1.0;
@@ -189,10 +194,10 @@ public class ShootAction : BaseAction
 
         attackAccuracy = baseAccuracy * Math.Exp(-(k * attackDistance + coverFactor * coverPoints));
 
-        Debug.Log($"Attack Distance: {attackDistance}");
+        /*Debug.Log($"Attack Distance: {attackDistance}");
         Debug.Log($"Attack Direction: {attackDirection.ToString()}");
         Debug.Log($"Target Unit Accounted Cover Points: {coverPoints}");
-        Debug.Log($"TU North: {targetUnit.GetCoverSystem().GetNorthCoverPoints()}; TU South: {targetUnit.GetCoverSystem().GetSouthCoverPoints()}; TU East: {targetUnit.GetCoverSystem().GetEastCoverPoints()}; TU West: {targetUnit.GetCoverSystem().GetWestCoverPoints()};");
+        Debug.Log($"TU North: {targetUnit.GetCoverSystem().GetNorthCoverPoints()}; TU South: {targetUnit.GetCoverSystem().GetSouthCoverPoints()}; TU East: {targetUnit.GetCoverSystem().GetEastCoverPoints()}; TU West: {targetUnit.GetCoverSystem().GetWestCoverPoints()};");*/
 
         return attackAccuracy;
     }
@@ -249,6 +254,7 @@ public class ShootAction : BaseAction
     public List<GridPosition> GetValidActionGridPositionList(GridPosition unitGridPosition)
     {
         List<GridPosition> validGridPositionList = new List<GridPosition>();
+        availableTargets.Clear();
 
         for (int x = -maxShootDistance; x <= maxShootDistance; x++)
         {
@@ -299,7 +305,7 @@ public class ShootAction : BaseAction
 
                 validGridPositionList.Add(testGridPosition);
                 GridObject gridobject = LevelGrid.Instance.GetGridObject(testGridPosition);
-                validTargets.Add(gridobject.GetUnit());
+                availableTargets.Add(gridobject.GetUnit());
             }
         }
 
@@ -347,12 +353,13 @@ public class ShootAction : BaseAction
 
     public Unit GetClosestTarget()
     {
-        return validTargets[0];
+        if(availableTargets.Count != 0)
+            return availableTargets[0];
+        else return null;
     }
 
     public void AimCharacterForActionCamera(Unit aimTarget)
     {
-        Debug.Log("AimCharacterForActionCamera called");
         targetUnit = aimTarget;
         state = State.Aiming;
     }
@@ -360,5 +367,25 @@ public class ShootAction : BaseAction
     public void StopAimForActionCamera(Unit aimTarget)
     {
         state = State.Cooloff;
+    }
+
+    public List<Unit> GetAvailableTargets()
+    {
+        return availableTargets;
+    }
+
+    private void UnitActionSystem_OnShootActionSelected(object sender, EventArgs e)
+    {
+        availableTargets.Clear();
+    }
+
+    public void SetTargetUnit(Unit targetUnit)
+    {
+        this.targetUnit = targetUnit;
+    }
+
+    public double GetCalculatedAttackAccuracy(Unit targetUnit)
+    {
+        return CalculateAttackAccuracy(targetUnit);
     }
 }

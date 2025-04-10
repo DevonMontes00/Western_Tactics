@@ -5,7 +5,7 @@ using System;
 
 public class ActionButtonUI : MonoBehaviour
 {
-    public static event EventHandler<BaseAction> OnAnyActionButtonPressed;
+    public static event EventHandler<ShootAction> OnShootActionButtonPressed;
 
     [SerializeField] private TextMeshProUGUI textMeshPro;
     [SerializeField] private Button button;
@@ -21,7 +21,7 @@ public class ActionButtonUI : MonoBehaviour
         button.onClick.AddListener(() =>
         {
             UnitActionSystem.Instance.SetSelectedAction(baseAction);
-            OnAnyActionButtonPressed?.Invoke(this, baseAction);
+            ButttonPresed();
         });
     }
 
@@ -39,5 +39,13 @@ public class ActionButtonUI : MonoBehaviour
     public BaseAction GetBaseAction()
     {
         return baseAction;
+    }
+
+    private void ButttonPresed()
+    {
+        if(this.baseAction is ShootAction)
+        {
+            OnShootActionButtonPressed?.Invoke(this, (ShootAction) this.baseAction);
+        }
     }
 }

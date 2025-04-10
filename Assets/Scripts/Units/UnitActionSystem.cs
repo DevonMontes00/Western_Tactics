@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 public class UnitActionSystem : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class UnitActionSystem : MonoBehaviour
 
     public event EventHandler OnSelectedUnitChanged;
     public event EventHandler OnSelectedActionChanged;
+    public event EventHandler <ShootAction>OnShootActionSelected;
     public event EventHandler<bool> OnBusyChanged;
     public event EventHandler OnActionStarted;
 
@@ -34,7 +36,12 @@ public class UnitActionSystem : MonoBehaviour
     private void Start()
     {
         SetSelectedUnit(selectedUnit);
+
+        ShootActionCameraUI.OnFireButtonClicked += ShootActionCameraUI_OnFireButtonClicked;
+        ActionButtonUI.OnShootActionButtonPressed += ActionButtonUI_OnShootActionButtonPressed;
     }
+
+    
 
     private void Update()
     {
@@ -87,6 +94,17 @@ public class UnitActionSystem : MonoBehaviour
                     OnActionStarted?.Invoke(this, EventArgs.Empty);
                 } 
             }
+        }
+    }
+
+    private void OutsideHandleSelectedAction(GridPosition gridPosition)
+    {
+        if (selectedUnit.TrySpendActionPointsToTakeAction(selectedAction))
+        {
+            SetBusy();
+            selectedAction.TakeAction(gridPosition, ClearBusy);
+
+            OnActionStarted?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -154,5 +172,15 @@ public class UnitActionSystem : MonoBehaviour
     public BaseAction GetSelectedAction()
     {
         return selectedAction;
+    }
+
+    private void ShootActionCameraUI_OnFireButtonClicked(object sender, GridPosition gridPosition)
+    {
+        OutsideHandleSelectedAction(gridPosition);
+    }
+
+    private void ActionButtonUI_OnShootActionButtonPressed(object sender, ShootAction shootAction)
+    {
+        OnShootActionSelected?.Invoke(this, shootAction);
     }
 }

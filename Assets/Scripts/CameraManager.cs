@@ -8,6 +8,8 @@ public class CameraManager : MonoBehaviour
     public event EventHandler OnActionCameraDisabled;
 
     [SerializeField] private GameObject actionCameraGameObject;
+    [SerializeField] private ShootActionCameraUI shootActionCameraUI;
+
     private bool actionCameraActive;
 
     private void Awake()
@@ -26,7 +28,21 @@ public class CameraManager : MonoBehaviour
     {
         BaseAction.OnAnyActionStarted += BaseAction_OnAnyActionStarted;
         BaseAction.OnAnyActionCompleted += BaseAction_OnAnyActionCompleted;
-        ActionButtonUI.OnAnyActionButtonPressed += ActionButtonUI_OnAnyActionButtonPressed;
+
+        UnitActionSystem.Instance.OnShootActionSelected += UnitActionSystem_OnShootActionSelected;
+    }
+
+    //For some reason this is needed or else Unity believes that CamaeraManager doesnt exist anymore
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+
+        BaseAction.OnAnyActionStarted -= BaseAction_OnAnyActionStarted;
+        BaseAction.OnAnyActionCompleted -= BaseAction_OnAnyActionCompleted;
+        UnitActionSystem.Instance.OnShootActionSelected -= UnitActionSystem_OnShootActionSelected;
     }
 
     private void ShowActionCamera()
@@ -81,36 +97,37 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    private void ActionButtonUI_OnAnyActionButtonPressed(object sender, BaseAction e)
+    private void UnitActionSystem_OnShootActionSelected(object sender, ShootAction shootAction)
     {
-        switch (e)
+        MoveActionCamera(shootAction.GetUnit(), shootAction.GetAvailableTargets()[0]);
+        ShowActionCamera();
+        shootActionCameraUI.EnableShootActionCameraUI();
+    }
+
+    public void MoveActionCamera(Unit shooterUnit, Unit targetUnit = null)
+    {
+
+        if (targetUnit != null)
         {
-            case MoveAction moveAction:
-                HideActionCamera();
-                break;
+            Vector3 cameraCharacterHeight = Vector3.up * 1.7f;
 
-            case ShootAction shootAction:
-                Unit shooterUnit = shootAction.GetUnit();
-                Unit targetUnit = shootAction.GetClosestTarget();
+            Vector3 shootDir = (targetUnit.GetWorldPosition() - shooterUnit.GetWorldPosition()).normalized;
 
-                Vector3 cameraCharacterHeight = Vector3.up * 1.7f;
+            float shoulderOffsetAmount = 0.5f;
+            Vector3 shoulderOffset = Quaternion.Euler(0, 90, 0) * shootDir * shoulderOffsetAmount;
 
-                Vector3 shootDir = (targetUnit.GetWorldPosition() - shooterUnit.GetWorldPosition()).normalized;
+            Vector3 actionCameraPosition = shooterUnit.GetWorldPosition() + cameraCharacterHeight + shoulderOffset + (shootDir * -1);
 
-                float shoulderOffsetAmount = 0.5f;
-                Vector3 shoulderOffset = Quaternion.Euler(0, 90, 0) * shootDir * shoulderOffsetAmount;
+            actionCameraGameObject.transform.position = actionCameraPosition;
+            actionCameraGameObject.transform.LookAt(targetUnit.GetWorldPosition() + cameraCharacterHeight);
 
-                Vector3 actionCameraPosition = shooterUnit.GetWorldPosition() + cameraCharacterHeight + shoulderOffset + (shootDir * -1);
+            //TO-DO: I want to get the unit to rotate towards the target unit, but I cant seem to figure it out
+            shooterUnit.transform.LookAt(targetUnit.GetWorldPosition());
+        }
 
-                actionCameraGameObject.transform.position = actionCameraPosition;
-                actionCameraGameObject.transform.LookAt(targetUnit.GetWorldPosition() + cameraCharacterHeight);
-
-                //TO-DO: I want to get the unit to rotate towards the target unit, but I cant seem to figure it out
-                //shooterUnit.GetAction<ShootAction>().AimCharacterForActionCamera(targetUnit);
-                shooterUnit.transform.LookAt(targetUnit.GetWorldPosition());
-
-                ShowActionCamera();
-                break;
+        else
+        {
+            //TO:DO what if no valid target
         }
     }
 }
