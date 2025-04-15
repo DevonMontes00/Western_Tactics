@@ -14,6 +14,7 @@ public class ShootAction : BaseAction
     {
         public Unit targetUnit;
         public Unit shootingUnit;
+        public bool attackHits;
     }
     private enum State
     {
@@ -112,20 +113,28 @@ public class ShootAction : BaseAction
             shootingUnit = unit,
         });
 
-        OnShoot?.Invoke(this, new OnShootEventArgs
-        {
-            targetUnit = targetUnit,
-            shootingUnit = unit,
-        });
+        
 
         if(AttackHits())
         {
             targetUnit.Damage(40);
+            OnShoot?.Invoke(this, new OnShootEventArgs
+            {
+                targetUnit = targetUnit,
+                shootingUnit = unit,
+                attackHits = true
+            });
             Debug.Log("Attack hit");
         }
 
         else
         {
+            OnShoot?.Invoke(this, new OnShootEventArgs
+            {
+                targetUnit = targetUnit,
+                shootingUnit = unit,
+                attackHits = false
+            });
             Debug.Log("Attack miss");
         }
         

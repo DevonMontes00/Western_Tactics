@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class UnitAnimator : MonoBehaviour
 {
@@ -58,10 +59,56 @@ public class UnitAnimator : MonoBehaviour
 
         BulletProjectile bulletProjectile = bulletProjectileTransform.GetComponent<BulletProjectile>();
 
-        Vector3 targetUnitShootPosition = e.targetUnit.GetWorldPosition();
+        if (e.attackHits)
+        {
+            Vector3 targetUnitShootPosition = e.targetUnit.GetWorldPosition();
 
-        targetUnitShootPosition.y = shootPointTransform.position.y;
-        bulletProjectile.Setup(targetUnitShootPosition);
+            targetUnitShootPosition.y = shootPointTransform.position.y;
+            bulletProjectile.Setup(targetUnitShootPosition);
+        }
+
+        else
+        {
+            System.Random rand = new System.Random();
+
+            Vector3 targetUnitShootPosition = e.targetUnit.GetWorldPosition();
+            GridPosition coverObjectGridPositon = LevelGrid.Instance.GetGridPosition(targetUnitShootPosition);
+
+            Vector3 offset = Vector3.zero;
+
+
+            if(e.targetUnit.GetCoverSystem().GetNorthCoverPoints() > 0)
+            {
+                offset = new Vector3(targetUnitShootPosition.x, shootPointTransform.position.y, targetUnitShootPosition.z + 2);
+                coverObjectGridPositon = LevelGrid.Instance.GetGridPosition(offset);
+            }
+
+            else if (e.targetUnit.GetCoverSystem().GetSouthCoverPoints() > 0)
+            {
+                offset = new Vector3(targetUnitShootPosition.x, shootPointTransform.position.y, targetUnitShootPosition.z - 2);
+                coverObjectGridPositon = LevelGrid.Instance.GetGridPosition(offset);
+            }
+
+            else if (e.targetUnit.GetCoverSystem().GetWestCoverPoints() > 0)
+            {
+                offset = new Vector3(targetUnitShootPosition.x - 2, shootPointTransform.position.y, targetUnitShootPosition.z + 2);
+                coverObjectGridPositon = LevelGrid.Instance.GetGridPosition(offset);
+            }
+
+            else if (e.targetUnit.GetCoverSystem().GetEastCoverPoints() > 0)
+            {
+                offset = new Vector3(targetUnitShootPosition.x + 2, shootPointTransform.position.y, targetUnitShootPosition.z + 2);
+                coverObjectGridPositon = LevelGrid.Instance.GetGridPosition(offset);
+            }
+
+            else
+            {
+                offset = new Vector3(targetUnitShootPosition.x, targetUnitShootPosition.y, targetUnitShootPosition.z);
+                coverObjectGridPositon = LevelGrid.Instance.GetGridPosition(offset);
+            }
+
+            bulletProjectile.Setup(offset);
+        }
     }
 
     private void Start()

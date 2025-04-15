@@ -64,7 +64,6 @@ public class Pathfinding : MonoBehaviour
 
                         if (coverObject.TryGetComponent<DestructableCrate>(out DestructableCrate destructableCrate))
                         {
-                            Debug.Log("Event set up");
                             coverObject.OnCoverObjectDestroyed += CoverObject_OnCoverObjectDestroyed;
                         }
                     }

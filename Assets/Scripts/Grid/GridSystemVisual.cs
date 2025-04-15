@@ -174,7 +174,6 @@ public class GridSystemVisual : MonoBehaviour
 
                 if (LevelGrid.Instance.GetGridObject(testGridPosition).GetNorthCoverPoints() == 2.5)
                 {
-                    Debug.Log($"North cover points");
                     gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowHalfCoverSouthShield();
                 }
 
@@ -188,7 +187,6 @@ public class GridSystemVisual : MonoBehaviour
             {
                 if (LevelGrid.Instance.GetGridObject(testGridPosition).GetSouthCoverPoints() == 2.5)
                 {
-                    Debug.Log($"South cover points");
                     gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowHalfCoverNorthShield();
                 }
 
@@ -202,13 +200,11 @@ public class GridSystemVisual : MonoBehaviour
             {
                 if (LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() == 2.5)
                 {
-                    Debug.Log($"West cover points");
                     gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowHalfCoverEastShield();
                 }
 
                 if (LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() == 5)
                 {
-                    Debug.Log($"East cover points");
                     gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowFullCoverEastShield();
                 }
             }

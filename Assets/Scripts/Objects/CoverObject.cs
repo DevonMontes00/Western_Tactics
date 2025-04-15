@@ -42,7 +42,6 @@ public class CoverObject : MonoBehaviour
     {
         if(gameObject.TryGetComponent<DestructableCrate>(out DestructableCrate destructableCrate))
         {
-            Debug.Log($"Cover object is Destructable");
             destructableCrate.OnDestroy += DestructableCrate_OnDestroy;
             destroyable = true;
         }
@@ -53,7 +52,6 @@ public class CoverObject : MonoBehaviour
 
     private void DestructableCrate_OnDestroy(object sender, EventArgs e)
     {
-        Debug.Log($"Crate Destroyed");
         OnCoverObjectDestroyed?.Invoke(this, EventArgs.Empty);
     }
 
