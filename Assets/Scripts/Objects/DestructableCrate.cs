@@ -4,6 +4,7 @@ using UnityEngine;
 public class DestructableCrate : MonoBehaviour
 {
     public static event EventHandler OnAnyDestroy;
+    public event EventHandler OnDestroy;
 
     [SerializeField] private Transform crateDestroyPrefab;
     private GridPosition gridPosition;
@@ -20,6 +21,7 @@ public class DestructableCrate : MonoBehaviour
 
         Destroy(gameObject);
 
+        OnDestroy?.Invoke(this, EventArgs.Empty);
         OnAnyDestroy?.Invoke(this, EventArgs.Empty);
     }
 

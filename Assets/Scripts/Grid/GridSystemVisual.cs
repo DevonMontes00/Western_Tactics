@@ -161,15 +161,6 @@ public class GridSystemVisual : MonoBehaviour
                     continue;
                 }
 
-                /*if (LevelGrid.Instance.GetGridObject(testGridPosition).GetNorthCoverPoints() < 0 &&
-                    LevelGrid.Instance.GetGridObject(testGridPosition).GetSouthCoverPoints() < 0 &&
-                    LevelGrid.Instance.GetGridObject(testGridPosition).GetEastCoverPoints() < 0 &&
-                    LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() < 0)
-                {
-                    //No cover points in any direction
-                    continue;
-                }*/
-
                 gridPositionList.Add(testGridPosition);
             }
         }
@@ -183,6 +174,7 @@ public class GridSystemVisual : MonoBehaviour
 
                 if (LevelGrid.Instance.GetGridObject(testGridPosition).GetNorthCoverPoints() == 2.5)
                 {
+                    Debug.Log($"North cover points");
                     gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowHalfCoverSouthShield();
                 }
 
@@ -196,6 +188,7 @@ public class GridSystemVisual : MonoBehaviour
             {
                 if (LevelGrid.Instance.GetGridObject(testGridPosition).GetSouthCoverPoints() == 2.5)
                 {
+                    Debug.Log($"South cover points");
                     gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowHalfCoverNorthShield();
                 }
 
@@ -209,11 +202,13 @@ public class GridSystemVisual : MonoBehaviour
             {
                 if (LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() == 2.5)
                 {
+                    Debug.Log($"West cover points");
                     gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowHalfCoverEastShield();
                 }
 
                 if (LevelGrid.Instance.GetGridObject(testGridPosition).GetWestCoverPoints() == 5)
                 {
+                    Debug.Log($"East cover points");
                     gridSystemVisualSinglesArray[testGridPosition.x, testGridPosition.z].ShowFullCoverEastShield();
                 }
             }

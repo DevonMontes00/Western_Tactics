@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Pathfinding : MonoBehaviour
 {
@@ -59,6 +60,13 @@ public class Pathfinding : MonoBehaviour
                         double coverPoints = coverObject.GetCoverPoints();
 
                         CheckForCoverNodes(gridPosition, coverPoints);
+                        
+
+                        if (coverObject.TryGetComponent<DestructableCrate>(out DestructableCrate destructableCrate))
+                        {
+                            Debug.Log("Event set up");
+                            coverObject.OnCoverObjectDestroyed += CoverObject_OnCoverObjectDestroyed;
+                        }
                     }
                 }
             }
@@ -319,5 +327,29 @@ public class Pathfinding : MonoBehaviour
     {
         FindPath(startGridPosition, endGridPosition, out int pathLength);
         return pathLength;
+    }
+
+    private void CoverObject_OnCoverObjectDestroyed(object sender, EventArgs e)
+    {
+        
+        CoverObject coverObject = (CoverObject)sender;
+        GridPosition coverObjectGridPosition = coverObject.GetGridPosition();
+        GridObject coverObjectGridObject = LevelGrid.Instance.GetGridObject(coverObjectGridPosition);
+
+        GridPosition testGridPositon = new GridPosition(coverObjectGridPosition.x + 1, coverObjectGridPosition.z);
+        coverObjectGridObject = LevelGrid.Instance.GetGridObject(testGridPositon);
+        coverObjectGridObject.SetEastCoverPoints(0);
+        
+        testGridPositon = new GridPosition(coverObjectGridPosition.x - 1, coverObjectGridPosition.z);
+        coverObjectGridObject = LevelGrid.Instance.GetGridObject(testGridPositon);
+        coverObjectGridObject.SetWestCoverPoints(0);
+
+        testGridPositon = new GridPosition(coverObjectGridPosition.x, coverObjectGridPosition.z + 1);
+        coverObjectGridObject = LevelGrid.Instance.GetGridObject(testGridPositon);
+        coverObjectGridObject.SetNorthCoverPoints(0);
+
+        testGridPositon = new GridPosition(coverObjectGridPosition.x, coverObjectGridPosition.z - 1);
+        coverObjectGridObject = LevelGrid.Instance.GetGridObject(testGridPositon);
+        coverObjectGridObject.SetSouthCoverPoints(0);
     }
 }

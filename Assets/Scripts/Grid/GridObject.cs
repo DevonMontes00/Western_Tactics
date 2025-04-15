@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public class GridObject
 {
@@ -147,5 +148,26 @@ public class GridObject
     public void SetWestCoverPoints(double coverPointsWest)
     {
         this.westCoverPoints = coverPointsWest;
+    }
+
+    public void ResetCoverPoints()
+    {
+        this.westCoverPoints = 0;
+        this.southCoverPoints = 0;
+        this.eastCoverPoints = 0;
+        this.northCoverPoints = 0;
+    }
+
+    public bool HasAnyCover()
+    {
+        if (this.westCoverPoints != 0 || this.northCoverPoints != 0 || this.southCoverPoints != 0 || this.eastCoverPoints != 0)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
     }
 }

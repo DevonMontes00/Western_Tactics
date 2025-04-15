@@ -1,7 +1,14 @@
+using System;
+using System.CodeDom;
 using UnityEngine;
 
 public class CoverObject : MonoBehaviour
 {
+    public event EventHandler OnCoverObjectDestroyed;
+
+    private GridPosition gridPosition;
+    private bool destroyable;
+
     private enum CoverType{
         None,
         Half,
@@ -27,10 +34,46 @@ public class CoverObject : MonoBehaviour
         {
             coverPoints = 5;
         }
+
+        gridPosition = LevelGrid.Instance.GetGridPosition(gameObject.transform.position);
+    }
+
+    private void Start()
+    {
+        if(gameObject.TryGetComponent<DestructableCrate>(out DestructableCrate destructableCrate))
+        {
+            Debug.Log($"Cover object is Destructable");
+            destructableCrate.OnDestroy += DestructableCrate_OnDestroy;
+            destroyable = true;
+        }
+
+        else
+            { destroyable = false; }
+    }
+
+    private void DestructableCrate_OnDestroy(object sender, EventArgs e)
+    {
+        Debug.Log($"Crate Destroyed");
+        OnCoverObjectDestroyed?.Invoke(this, EventArgs.Empty);
     }
 
     public double GetCoverPoints()
     {
         return coverPoints;
+    }
+
+    public bool IsDestroyable()
+    {
+        return destroyable;
+    }
+
+    public void SetGridPosition(GridPosition gridPosition)
+    {
+        this.gridPosition = gridPosition;
+    }
+
+    public GridPosition GetGridPosition()
+    {
+        return gridPosition;
     }
 }
