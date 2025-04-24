@@ -17,19 +17,30 @@ public class MouseWorld : MonoBehaviour
 
     public void Update()
     {
-        if (UnitActionSystem.Instance.GetSelectedAction() is ShootAction)
+        if (hoverUnit == null)
         {
-            if (IsHoveringEnemyGridPosition() || IsHoveringEnemyUnit())
+            if (UnitActionSystem.Instance.GetSelectedAction() is ShootAction)
             {
-                ShowEnemyUnitHitPercentage();
+                if (IsHoveringEnemyGridPosition() || IsHoveringEnemyUnit())
+                {
+                    ShowEnemyUnitHitPercentage();
+                }
             }
+        }
 
-            else if (hoverUnit != null)
+        else if (hoverUnit != null)
+        {
+            if (UnitActionSystem.Instance.GetSelectedAction() is not ShootAction)
             {
                 HideEnemyUnitHitPercentage();
             }
+
+            if (!IsHoveringEnemyGridPosition() && !IsHoveringEnemyUnit())
+            {
+                HideEnemyUnitHitPercentage();
+            }   
         }
-        
+
     }
 
     public static Vector3 GetPosition()
@@ -122,5 +133,6 @@ public class MouseWorld : MonoBehaviour
     private void HideEnemyUnitHitPercentage()
     {
         hoverUnit.SetIsHoveredForTarget(false);
+        hoverUnit = null;
     }
 }
