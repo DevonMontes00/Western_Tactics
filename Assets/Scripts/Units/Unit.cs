@@ -9,6 +9,8 @@ public class Unit : MonoBehaviour
     public static event EventHandler OnAnyActionPointsChanged;
     public static event EventHandler OnAnyUnitSpawned;
     public static event EventHandler OnAnyUnitDead;
+    public event EventHandler<string> OnHoveredForTarget;
+    public event EventHandler OnHoverOffForTarget;
 
 
     private GridPosition gridPosition;
@@ -16,6 +18,8 @@ public class Unit : MonoBehaviour
     private CoverSystem coverSystem;
     private BaseAction[] baseActionArray;
     private int actionPoints;
+    private bool isHoveredForTarget;
+    private double hitPercentage;
 
     [SerializeField] private bool isEnemy;
 
@@ -156,5 +160,20 @@ public class Unit : MonoBehaviour
     public CoverSystem GetCoverSystem()
     {
         return coverSystem;
+    }
+
+    public void SetIsHoveredForTarget(bool isHovered, string hitPercentage = "0%")
+    {
+        this.isHoveredForTarget = isHovered;
+
+        if(isHovered)
+        {
+            OnHoveredForTarget?.Invoke(this, hitPercentage);
+        }
+
+        else
+        {
+            OnHoverOffForTarget?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

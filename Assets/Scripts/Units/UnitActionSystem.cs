@@ -38,7 +38,7 @@ public class UnitActionSystem : MonoBehaviour
         SetSelectedUnit(selectedUnit);
 
         ShootActionCameraUI.OnFireButtonClicked += ShootActionCameraUI_OnFireButtonClicked;
-        ActionButtonUI.OnShootActionButtonPressed += ActionButtonUI_OnShootActionButtonPressed;
+        //ActionButtonUI.OnShootActionButtonPressed += ActionButtonUI_OnShootActionButtonPressed;
     }
 
     

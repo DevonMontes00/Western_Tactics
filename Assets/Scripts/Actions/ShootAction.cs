@@ -142,7 +142,7 @@ public class ShootAction : BaseAction
 
     private bool AttackHits()
     {
-        double attackAccuracy = CalculateAttackAccuracy(targetUnit);
+        double attackAccuracy = CalculateAttackAccuracy(targetUnit, unit);
         OnAnyAttackAccuracyChanged?.Invoke(this, attackAccuracy);
         Debug.Log($"Attack Accuracy: {attackAccuracy}");
 
@@ -164,9 +164,9 @@ public class ShootAction : BaseAction
 
     }
 
-    private double CalculateAttackAccuracy(Unit targetUnit)
+    private double CalculateAttackAccuracy(Unit targetUnit, Unit shootingUnit)
     {
-        GridPosition shootingUnitGridPosition = unit.GetGridPosition();
+        GridPosition shootingUnitGridPosition = shootingUnit.GetGridPosition();
         GridPosition targetUnitGridPosition = targetUnit.GetGridPosition();
 
         double attackAccuracy;
@@ -182,7 +182,7 @@ public class ShootAction : BaseAction
 
         int attackDistance = (Pathfinding.Instance.CalculateDistance(shootingUnitGridPosition, targetUnitGridPosition)) / 10;
 
-        AttackDirection attackDirection = CalculateAttackDirection();
+        AttackDirection attackDirection = CalculateAttackDirection(targetUnit, shootingUnit);
         double coverPoints = 0;
 
         switch (attackDirection)
@@ -211,11 +211,11 @@ public class ShootAction : BaseAction
         return attackAccuracy;
     }
 
-    private AttackDirection CalculateAttackDirection()
+    private AttackDirection CalculateAttackDirection(Unit targetUnit, Unit shootingUnit)
     {
         AttackDirection direction;
 
-        Vector3 aimDir = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
+        Vector3 aimDir = (targetUnit.GetWorldPosition() - shootingUnit.GetWorldPosition()).normalized;
 
         string cardinalNS = aimDir.z > 0 ? "North" : "South";
         string cardianlEW = aimDir.x > 0 ? "East" : "West";
@@ -393,8 +393,8 @@ public class ShootAction : BaseAction
         this.targetUnit = targetUnit;
     }
 
-    public double GetCalculatedAttackAccuracy(Unit targetUnit)
+    public double GetCalculatedAttackAccuracy(Unit targetUnit, Unit shootingUnit)
     {
-        return CalculateAttackAccuracy(targetUnit);
+        return CalculateAttackAccuracy(targetUnit, shootingUnit);
     }
 }

@@ -107,8 +107,9 @@ public class ShootActionCameraUI : MonoBehaviour
     private void UpdateHitPercentageText()
     {
         ShootAction shootAction = (ShootAction)UnitActionSystem.Instance.GetSelectedAction();
+        Unit selectedUnit = UnitActionSystem.Instance.GetSelectedUnit();
 
-        double hitPercentage = shootAction.GetCalculatedAttackAccuracy(selectedTarget) * 100;
+        double hitPercentage = shootAction.GetCalculatedAttackAccuracy(selectedTarget, selectedUnit) * 100;
         int intHitPercentage = Convert.ToInt32(hitPercentage);
 
         hitPercentageText.text = intHitPercentage.ToString() + "%";

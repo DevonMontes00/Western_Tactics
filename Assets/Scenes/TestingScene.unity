@@ -1596,6 +1596,9 @@ MonoBehaviour:
   mousePlaneLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  unit:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!4 &489228245
 Transform:
   m_ObjectHideFlags: 0

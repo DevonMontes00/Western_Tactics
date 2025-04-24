@@ -21,7 +21,7 @@ public class ActionButtonUI : MonoBehaviour
         button.onClick.AddListener(() =>
         {
             UnitActionSystem.Instance.SetSelectedAction(baseAction);
-            ButttonPresed();
+            //ButttonPressed();
         });
     }
 
@@ -41,7 +41,7 @@ public class ActionButtonUI : MonoBehaviour
         return baseAction;
     }
 
-    private void ButttonPresed()
+    private void ButttonPressed()
     {
         if(this.baseAction is ShootAction)
         {

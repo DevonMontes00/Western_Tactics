@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CoverSystem : MonoBehaviour
 {
-    public event EventHandler OnAnyCoverPointsChanged;
+    public event EventHandler OnCoverPointsChanged;
 
     [SerializeField] private double northCoverPoints;
     [SerializeField] private double southCoverPoints;
@@ -22,7 +22,7 @@ public class CoverSystem : MonoBehaviour
     public void SetNorthCoverPoints(double northCoverPoints)
     {
         this.northCoverPoints = northCoverPoints;
-        OnAnyCoverPointsChanged?.Invoke(this, EventArgs.Empty);
+        OnCoverPointsChanged?.Invoke(this, EventArgs.Empty);
     }
     public double GetNorthCoverPoints()
     {
@@ -32,7 +32,7 @@ public class CoverSystem : MonoBehaviour
     public void SetSouthCoverPoints(double southCoverPoints)
     {
         this.southCoverPoints = southCoverPoints;
-        OnAnyCoverPointsChanged?.Invoke(this, EventArgs.Empty);
+        OnCoverPointsChanged?.Invoke(this, EventArgs.Empty);
     }
     public double GetSouthCoverPoints()
     {
@@ -42,7 +42,7 @@ public class CoverSystem : MonoBehaviour
     public void SetWestCoverPoints(double westCoverPoints)
     {
         this.westCoverPoints = westCoverPoints;
-        OnAnyCoverPointsChanged?.Invoke(this, EventArgs.Empty);
+        OnCoverPointsChanged?.Invoke(this, EventArgs.Empty);
     }
     public double GetWestCoverPoints()
     {
@@ -52,7 +52,7 @@ public class CoverSystem : MonoBehaviour
     public void SetEastCoverPoints(double eastCoverPoints)
     {
         this.eastCoverPoints = eastCoverPoints;
-        OnAnyCoverPointsChanged?.Invoke(this, EventArgs.Empty);
+        OnCoverPointsChanged?.Invoke(this, EventArgs.Empty);
     }
     public double GetEastCoverPoints()
     {
