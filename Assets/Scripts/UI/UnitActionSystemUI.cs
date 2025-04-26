@@ -90,4 +90,9 @@ public class UnitActionSystemUI : MonoBehaviour
 
         actionPointsText.text = "Action Points: " + selectedUnit.GetActionPoints();
     }
+
+    public List<ActionButtonUI> GetActionButtonUIList()
+    {
+        return actionButtonUIList;
+    }
 }

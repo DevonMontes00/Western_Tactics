@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7545697216001161482}
   - component: {fileID: 8761846245684978448}
   - component: {fileID: 3412388541577297604}
+  - component: {fileID: 5581905648705055707}
   m_Layer: 8
   m_Name: Wall
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.39, y: 0, z: 2.76}
-  m_LocalScale: {x: 4, y: 1, z: 10}
+  m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -109,3 +110,16 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 9a70db0102eed3c468687c669df871fb, type: 3}
+--- !u!114 &5581905648705055707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9085779493283320094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10dec88d5e2d50e478ab13f930224b95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coverType: 2

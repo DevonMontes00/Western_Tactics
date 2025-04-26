@@ -74,24 +74,40 @@ public class Pathfinding : MonoBehaviour
 
     private void CheckForCoverNodes(GridPosition gridPosition, double coverPoints)
     {
-        if (GetNode(gridPosition.x + 1, gridPosition.z).IsWalkable())
+        GridPosition testGridPosition = new GridPosition(gridPosition.x + 1, gridPosition.z);
+        if (LevelGrid.Instance.IsValidGridPosition(testGridPosition))
         {
-            SetGridObjectCoverPoints(gridPosition.x + 1, gridPosition.z , coverPoints, GridObject.CoverDirection.East);
+            if (GetNode(gridPosition.x + 1, gridPosition.z).IsWalkable())
+            {
+                SetGridObjectCoverPoints(gridPosition.x + 1, gridPosition.z, coverPoints, GridObject.CoverDirection.East);
+            }
         }
 
-        if (GetNode(gridPosition.x, gridPosition.z + 1).IsWalkable())
+        testGridPosition = new GridPosition(gridPosition.x, gridPosition.z + 1);
+        if (LevelGrid.Instance.IsValidGridPosition(testGridPosition))
         {
-            SetGridObjectCoverPoints(gridPosition.x, gridPosition.z + 1, coverPoints, GridObject.CoverDirection.North);
+            if (GetNode(gridPosition.x, gridPosition.z + 1).IsWalkable())
+            {
+                SetGridObjectCoverPoints(gridPosition.x, gridPosition.z + 1, coverPoints, GridObject.CoverDirection.North);
+            }
         }
 
-        if (GetNode(gridPosition.x - 1, gridPosition.z).IsWalkable())
+        testGridPosition = new GridPosition(gridPosition.x - 1, gridPosition.z);
+        if (LevelGrid.Instance.IsValidGridPosition(testGridPosition))
         {
-            SetGridObjectCoverPoints(gridPosition.x - 1, gridPosition.z, coverPoints, GridObject.CoverDirection.West);
+            if (GetNode(gridPosition.x - 1, gridPosition.z).IsWalkable())
+            {
+                SetGridObjectCoverPoints(gridPosition.x - 1, gridPosition.z, coverPoints, GridObject.CoverDirection.West);
+            }
         }
 
-        if (GetNode(gridPosition.x, gridPosition.z - 1).IsWalkable())
+        testGridPosition = new GridPosition(gridPosition.x, gridPosition.z - 1);
+        if (LevelGrid.Instance.IsValidGridPosition(testGridPosition))
         {
-            SetGridObjectCoverPoints(gridPosition.x, gridPosition.z - 1, coverPoints, GridObject.CoverDirection.South);
+            if (GetNode(gridPosition.x, gridPosition.z - 1).IsWalkable())
+            {
+                SetGridObjectCoverPoints(gridPosition.x, gridPosition.z - 1, coverPoints, GridObject.CoverDirection.South);
+            }
         }
     }
 

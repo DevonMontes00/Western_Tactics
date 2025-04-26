@@ -48,4 +48,9 @@ public class ActionButtonUI : MonoBehaviour
             OnShootActionButtonPressed?.Invoke(this, (ShootAction) this.baseAction);
         }
     }
+
+    public Button GetButton()
+    {
+        return button;
+    }
 }
