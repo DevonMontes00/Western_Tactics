@@ -9,6 +9,7 @@ public class UnitManager : MonoBehaviour
 
     public event EventHandler OnAllEnemiesDead;
     public event EventHandler OnAllFriendliesDead;
+    public event EventHandler OnAnyRoundOutcome;
 
     private List<Unit> unitList;
     private List<Unit> friendlyUnitList;
@@ -65,7 +66,9 @@ public class UnitManager : MonoBehaviour
 
             if(enemyUnitList.Count <= 0)
             {
+                Debug.Log("All Enemies Dead");
                 OnAllEnemiesDead?.Invoke(this, EventArgs.Empty);
+                OnAnyRoundOutcome?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -76,6 +79,7 @@ public class UnitManager : MonoBehaviour
             if(friendlyUnitList.Count <= 0)
             {
                 OnAllFriendliesDead?.Invoke(this, EventArgs.Empty);
+                OnAnyRoundOutcome?.Invoke(this, EventArgs.Empty);
             }
         }
     }

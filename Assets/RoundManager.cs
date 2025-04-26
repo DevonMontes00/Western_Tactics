@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class RoundManager : MonoBehaviour
 {
     public static RoundManager Instance { get; private set; }
+
+    public event EventHandler OnAllEnemiesDead;
 
     [SerializeField] private RoundOutcomeUI roundOutcomeUI;
     [SerializeField] private UnitActionSystemUI unitActionSystemUI;
@@ -16,30 +19,6 @@ public class RoundManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-    }
-
-    public void Start()
-    {
-        UnitManager.Instance.OnAllEnemiesDead += UnitManager_OnAllEnemiesDead;
-        UnitManager.Instance.OnAllFriendliesDead += UnitManager_OnAllFriendliesDead;
-    }
-
-    private void UnitManager_OnAllEnemiesDead(object sender, System.EventArgs e)
-    {
-        bool victory = true;
-        roundOutcomeUI.SetRoundOutcomeText(victory);
-        roundOutcomeUI.EnableRoundOutcomeUI();
-
-        DisablePlayerUnitControls();
-    }
-
-    private void UnitManager_OnAllFriendliesDead(object sender, System.EventArgs e)
-    {
-        bool victory = false;
-        roundOutcomeUI.SetRoundOutcomeText(victory);
-        roundOutcomeUI.EnableRoundOutcomeUI();
-
-        DisablePlayerUnitControls();
     }
 
     private void DisablePlayerUnitControls()

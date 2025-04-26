@@ -3,35 +3,55 @@ using UnityEngine;
 
 public class RoundOutcomeUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI RoundOutcomeText;
+    [SerializeField] private GameObject roundOutcomeLabel;
+    [SerializeField] private TextMeshProUGUI roundOutcomeText;
+    [SerializeField] private GameObject restartButtonContainer;
+    [SerializeField] private GameObject mainMenuButtonContainer;
+
+    private void Awake()
+    {
+        roundOutcomeLabel.SetActive(false);
+        restartButtonContainer.SetActive(false);
+        mainMenuButtonContainer.SetActive(false);
+    }
 
     private void Start()
     {
-        gameObject.SetActive(false);
+        UnitManager.Instance.OnAllEnemiesDead += UnitManager_OnAllEnemiesDead;
+        UnitManager.Instance.OnAllFriendliesDead += UnitManager_OnAllFriendliesDead;
     }
 
-    public void EnableRoundOutcomeUI()
+    private void UnitManager_OnAllFriendliesDead(object sender, System.EventArgs e)
     {
-        gameObject.SetActive(true);
+        
+        bool victory = false;
+        SetRoundOutcomeText(victory);
+        roundOutcomeLabel.SetActive(true);
+
+        restartButtonContainer.SetActive(true);
+        mainMenuButtonContainer.SetActive(true);
     }
 
-    public void DisableRoundOutcomeUI()
+    private void UnitManager_OnAllEnemiesDead(object sender, System.EventArgs e)
     {
-        gameObject.SetActive(false);
+        Debug.Log("Testing");
+        bool victory = true;
+        SetRoundOutcomeText(victory);
+        roundOutcomeLabel.SetActive(true);
     }
 
-    public void SetRoundOutcomeText(bool victory)
+    private void SetRoundOutcomeText(bool victory)
     {
         if (victory)
         {
-            RoundOutcomeText.color = new Color(0, 255, 13);
-            RoundOutcomeText.text = "VICTORY";
+            roundOutcomeText.color = new Color(0, 255, 13);
+            roundOutcomeText.text = "VICTORY";
         }
 
         else
         {
-            RoundOutcomeText.color = Color.red;
-            RoundOutcomeText.text = "DEFEAT";
+            roundOutcomeText.color = Color.red;
+            roundOutcomeText.text = "DEFEAT";
         }
     }
 

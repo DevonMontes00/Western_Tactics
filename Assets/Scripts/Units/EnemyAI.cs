@@ -22,6 +22,7 @@ public class EnemyAI : MonoBehaviour
     private void Start()
     {
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+        UnitManager.Instance.OnAllFriendliesDead += UnitManager_OnAllFriendliesDead;
     }
 
     void Update()
@@ -125,5 +126,9 @@ public class EnemyAI : MonoBehaviour
         {
             return false;
         }
+    }
+    private void UnitManager_OnAllFriendliesDead(object sender, EventArgs e)
+    {
+        gameObject.SetActive(false);
     }
 }

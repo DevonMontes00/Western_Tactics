@@ -16,6 +16,7 @@ public class TurnSystemUI : MonoBehaviour
         });
 
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged;
+        UnitManager.Instance.OnAllFriendliesDead += UnitManager_OnAllFriendliesDead;
 
         UpdateTurnText();
         UpdateEnemyTurnVisual();
@@ -42,5 +43,10 @@ public class TurnSystemUI : MonoBehaviour
     private void UpdateEndTurnButtonVisibility()
     {
         endTurnButton.gameObject.SetActive(TurnSystem.Instance.IsPlayerTurn());
+    }
+
+    private void UnitManager_OnAllFriendliesDead(object sender, System.EventArgs e)
+    {
+        enemnyTurnVisualGameObject.SetActive(false);
     }
 }
