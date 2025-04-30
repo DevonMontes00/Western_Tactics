@@ -7,12 +7,14 @@ public class RoundOutcomeUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI roundOutcomeText;
     [SerializeField] private GameObject restartButtonContainer;
     [SerializeField] private GameObject mainMenuButtonContainer;
+    [SerializeField] private GameObject continueButtonContainer;
 
     private void Awake()
     {
         roundOutcomeLabel.SetActive(false);
         restartButtonContainer.SetActive(false);
         mainMenuButtonContainer.SetActive(false);
+        continueButtonContainer.SetActive(false);
     }
 
     private void Start()
@@ -38,6 +40,8 @@ public class RoundOutcomeUI : MonoBehaviour
         bool victory = true;
         SetRoundOutcomeText(victory);
         roundOutcomeLabel.SetActive(true);
+
+        continueButtonContainer.SetActive(true);
     }
 
     private void SetRoundOutcomeText(bool victory)

@@ -17,6 +17,7 @@ public class Pathfinding : MonoBehaviour
     private int height;
     private float cellSize;
     private GridSystem<PathNode> gridSystem;
+    private List<GridPosition> allWalkableGridPositions;
 
     private void Awake()
     {
@@ -29,7 +30,7 @@ public class Pathfinding : MonoBehaviour
 
         Instance = this;
 
-        
+        allWalkableGridPositions = new List<GridPosition>();
     }
 
     public void Setup(int width, int height, float cellSize)
@@ -61,12 +62,16 @@ public class Pathfinding : MonoBehaviour
 
                         CheckForCoverNodes(gridPosition, coverPoints);
                         
-
                         if (coverObject.TryGetComponent<DestructableCrate>(out DestructableCrate destructableCrate))
                         {
                             coverObject.OnCoverObjectDestroyed += CoverObject_OnCoverObjectDestroyed;
                         }
                     }
+                }
+
+                else
+                {
+                    allWalkableGridPositions.Add(gridPosition);
                 }
             }
         }
@@ -366,5 +371,10 @@ public class Pathfinding : MonoBehaviour
         testGridPositon = new GridPosition(coverObjectGridPosition.x, coverObjectGridPosition.z - 1);
         coverObjectGridObject = LevelGrid.Instance.GetGridObject(testGridPositon);
         coverObjectGridObject.SetSouthCoverPoints(0);
+    }
+
+    public List<GridPosition> GetAllWalkableGridPositions()
+    {
+        return allWalkableGridPositions;
     }
 }

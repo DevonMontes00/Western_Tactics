@@ -13,7 +13,9 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private int width;
     [SerializeField] private int height;
     [SerializeField] private float cellSize;
+
     private GridSystem<GridObject> gridSystem;
+    private List<Door> listOfAllDoors;
 
     private void Awake()
     {
@@ -28,6 +30,10 @@ public class LevelGrid : MonoBehaviour
 
         gridSystem = new GridSystem<GridObject>(width, height, cellSize, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
         //gridSystem.CreateDebugObjects(gridDebugObjectPrefab);
+
+        listOfAllDoors = new List<Door>();
+        Door.OnAnyDoorCreated += Door_OnAnyDoorCreated;
+        Door.OnAnyDoorDestroyed += Door_OnAnyDoorDestroyed;
     }
 
     private void Start()
@@ -95,4 +101,21 @@ public class LevelGrid : MonoBehaviour
     }
 
     public GridObject GetGridObject(GridPosition gridPosition) => gridSystem.GetGridObject(gridPosition);
+
+    private void Door_OnAnyDoorCreated(object sender, EventArgs e)
+    {
+        Door door = (Door)sender;
+        listOfAllDoors.Add(door);
+    }
+
+    private void Door_OnAnyDoorDestroyed(object sender, EventArgs e)
+    {
+        Door door = (Door)sender;
+        listOfAllDoors.Remove(door);
+    }
+
+    public List<Door> GetListOfAllDoors()
+    {
+        return listOfAllDoors;
+    }
 }
